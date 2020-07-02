@@ -1,8 +1,9 @@
 @extends('layout/master')
 
 @section('title')
-    Admin Dashboard
+    Dashboard
 @endsection
+
 @section('content')
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
@@ -16,14 +17,16 @@
         <a class="navbar-brand" href="#">Project name</a>
       </div>
       <div id="navbar" class="navbar-collapse collapse">
-        @auth
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="#">Dashboard</a></li>
-          <li><a href="#">Hello {{ auth()->user()->username }}</a></li>
+          <li><a href="/">Dashboard</a></li>
+          @if (Auth::check())
+            {
+                <li><a href="#"> Hello {{ auth()->user()->auditor_id }}</a></li>
+            }
+          @endif
           <li><a href="#">Profile</a></li>
-          <li><a href="/admin/logout">logout</a></li>
+          <li><a href="/auditor/logout">logout</a></li>
         </ul>
-        @endauth
         <form class="navbar-form navbar-right">
           <input type="text" class="form-control" placeholder="Search...">
         </form>
@@ -35,30 +38,14 @@
     <div class="row">
       <div class="col-sm-3 col-md-2 sidebar">
         <ul class="nav nav-sidebar">
-          <li class="active"><a href="#">Staff<span class="sr-only">(current)</span></a></li>
-          <li><a href="/staff/register">New Staff</a></li>
-          <li><a id="view_staff" href="#">View Staffs</a></li>
-          {{-- <li><button class="btn btn default" id="view_staff" >View Staffs</button></li> --}}
-        </ul>
-        <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Auditor</a></li>
-            <li><a href="/auditor/register">Add Auditor</a></li>
-            <li><a id="view_auditor" href="#">View Auditors</a></li>
-          </ul>
-        <ul class="nav nav-sidebar">
-          <li class="active"><a href="#">Registrar</a></li>
-          <li><a href="/registrar/register">Add Registrar</a></li>
-          <li><a id="view_registrar" href="#">View Registrars</a></li>
-        </ul>
-        <ul class="nav nav-sidebar">
-          <li class="active"><a href="#">Dean</a></li>
-          <li><a href="/dean/register">Add Dean</a></li>
-          <li><a id="view_dean" href="#">View Deans</a></li>
+          <li class="active"><a href="#">Auditor<span class="sr-only">(current)</span></a></li>
+          <li><a id="load_inbox" href="#">Inbox</a></li>
+          {{-- <li><a href="/staff/show">View Documents</a></li> --}}
         </ul>
       </div>
       <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-        <div id="content" class="table-responsive">
         <h2 class="sub-header">Uploded Documents</h2>
+        <div id="inbox" class="table-responsive">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -66,7 +53,6 @@
                 <th>Description</th>
                 <th>Document</th>
                 <th>Uploaded_At</th>
-                <th>Created By</th>
               </tr>
             </thead>
             <tbody>
@@ -75,9 +61,8 @@
                 <tr>
                     <td>{{$document->id}}</td>
                     <td>{{$document->description}}</td>
-                    <td><a href="/document/{{$document->id}}">{{$document->name}}</a></td>
+                    <td>{{$document->name}}</td>
                     <td>{{$document->created_at}}</td>
-                    <td>{{$document->staff->staff_id}}</td>
                 </tr>
                 @endforeach
             @else
@@ -89,32 +74,14 @@
       </div>
     </div>
   </div>
-@endsection
-@section('script')
+  @section('script')
 <script>
     $(document).ready(function () {
-        $('#view_staff').click(function (e) {
+        $('#load_inbox').click(function (e) {
             e.preventDefault();
-            $('#content').load('{{url('/staff/staffshow')}}');
-
-            });
-
-            $('#view_auditor').click(function (e) {
-            e.preventDefault();
-            $('#content').load('{{url('/auditor/show')}}');
-
-            });
-            $('#view_registrar').click(function (e) {
-            e.preventDefault();
-            $('#content').load('{{url('/registrar/show')}}');
-
-            });
-            $('#view_dean').click(function (e) {
-            e.preventDefault();
-            $('#content').load('{{url('/dean/show')}}');
+            $('#inbox').load('{{url('/inbox/audit')}}');
 
             });
         });
     </script>
 @endsection
-

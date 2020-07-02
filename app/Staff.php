@@ -2,10 +2,17 @@
 
 namespace App;
 
-use Illuminate\Contracts\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class Staff extends Model implements Authenticatable
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+
+class Staff extends  Authenticatable
 {
-    use \Illuminate\Auth\Authenticatable;
+    protected $guard = 'staff';
+
+    public function document(){
+
+        return $this->hasMany('App\Document');
+    }
 }

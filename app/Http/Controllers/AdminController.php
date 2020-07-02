@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\admin;
+
+use App\Document;
+use App\Admin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
+
     public function admin_login_page(){
 
         return view('admin/adminlogin');
@@ -22,7 +25,8 @@ class AdminController extends Controller
 
     public function admin_dashboard(){
 
-        return view('admin/admindashborad');
+        $documents =  Document::all();
+        return view('admin/admindashborad')->with('documents', $documents);
     }
 
     public function admin_register(Request $request){
@@ -47,7 +51,7 @@ class AdminController extends Controller
         Auth::login($admin);
 
 
-        return redirect("/admin/admindashborad")->with('success', 'Great! You have Successfully loggedin');
+        return redirect("/admin/admindashboard")->with('success', 'Great! You have Successfully loggedin');
 
 }
 
@@ -58,22 +62,26 @@ public function admin_login(Request $request){
         'password' => 'required',
 
     ]);
-
-    if (Auth::attempt([
+    if (Auth::guard('admin')->attempt([
         'username' => $request->username,
         'password' => $request->password])
     ){
         return redirect('/admin/admindashboard');
     }
-    return redirect('/admin/adminlogin')->with('error', 'username or Password');
+    return redirect('/admin/login')->with('error', 'username or Password');
 
 }
 
-public function logout() {
+public function logout(Request $request)
+{
 
-    Auth::logout();
+    Auth::guard('admin')->logout();
 
-    return redirect('/admin/adminlogin');
+    $request->session()->flush();
+
+    $request->session()->regenerate();
+
+    return redirect('/admin/login');
 }
 
 }

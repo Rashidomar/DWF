@@ -46,6 +46,31 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
+
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+
+        'staff' => [
+            'driver' => 'session',
+            'provider' => 'staffs',
+        ],
+
+        'auditor' => [
+            'driver' => 'session',
+            'provider' => 'auditors',
+        ],
+
+        'registrar' => [
+            'driver' => 'session',
+            'provider' => 'registrars',
+        ],
+
+        'dean' => [
+            'driver' => 'session',
+            'provider' => 'deans',
+        ],
     ],
 
     /*
@@ -71,15 +96,35 @@ return [
             'model' => App\User::class,
         ],
 
-        'users' => [
+        'admins' => [
             'driver' => 'eloquent',
-            'model' => App\admin::class,
+            'model' => App\Admin::class,
         ],
 
-        'users' => [
+        'staffs' => [
             'driver' => 'eloquent',
             'model' => App\Staff::class,
         ],
+
+        'auditors' => [
+            'driver' => 'eloquent',
+            'model' => App\Auditor::class,
+        ],
+
+        'registrars' => [
+            'driver' => 'eloquent',
+            'model' => App\Registrar::class,
+        ],
+
+        'deans' => [
+            'driver' => 'eloquent',
+            'model' => App\Dean::class,
+        ],
+
+        // 'users' => [
+        //     'driver' => 'eloquent',
+        //     'model' => App\Staff::class,
+        // ],
 
 
 
